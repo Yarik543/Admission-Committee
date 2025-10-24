@@ -28,12 +28,195 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "EditForm";
+            label1 = new Label();
+            label2 = new Label();
+            label3 = new Label();
+            label4 = new Label();
+            label5 = new Label();
+            cmbEduForm = new ComboBox();
+            label6 = new Label();
+            numericRussian = new NumericUpDown();
+            label7 = new Label();
+            btnSave = new Button();
+            btnCancel = new Button();
+            dateBDate = new DateTimePicker();
+            comboBox1 = new ComboBox();
+            txtFullName = new TextBox();
+            ((System.ComponentModel.ISupportInitialize)numericRussian).BeginInit();
+            SuspendLayout();
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(18, 40);
+            label1.Name = "label1";
+            label1.Size = new Size(42, 20);
+            label1.TabIndex = 0;
+            label1.Text = "ФИО";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(18, 95);
+            label2.Name = "label2";
+            label2.Size = new Size(37, 20);
+            label2.TabIndex = 2;
+            label2.Text = "Пол";
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(18, 149);
+            label3.Name = "label3";
+            label3.Size = new Size(116, 20);
+            label3.TabIndex = 4;
+            label3.Text = "Дата рождения";
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(18, 208);
+            label4.Name = "label4";
+            label4.Size = new Size(128, 20);
+            label4.TabIndex = 5;
+            label4.Text = "Форма обучения";
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(18, 259);
+            label5.Name = "label5";
+            label5.Size = new Size(139, 20);
+            label5.TabIndex = 6;
+            label5.Text = "Баллы математика";
+            // 
+            // cmbEduForm
+            // 
+            cmbEduForm.FormattingEnabled = true;
+            cmbEduForm.Items.AddRange(new object[] { "Очное", "Очно-заочное", "Заочное" });
+            cmbEduForm.Location = new Point(256, 210);
+            cmbEduForm.Name = "cmbEduForm";
+            cmbEduForm.Size = new Size(212, 28);
+            cmbEduForm.TabIndex = 8;
+            // 
+            // numericMath
+            // 
+            // 
+            // numericInfo
+            // 
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(18, 357);
+            label6.Name = "label6";
+            label6.Size = new Size(152, 20);
+            label6.TabIndex = 10;
+            label6.Text = "Баллы информатика";
+            // 
+            // numericRussian
+            // 
+            numericRussian.Location = new Point(256, 311);
+            numericRussian.Name = "numericRussian";
+            numericRussian.Size = new Size(212, 27);
+            numericRussian.TabIndex = 13;
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Location = new Point(18, 306);
+            label7.Name = "label7";
+            label7.Size = new Size(112, 20);
+            label7.TabIndex = 12;
+            label7.Text = "Баллы русский";
+            // 
+            // btnSave
+            // 
+            btnSave.BackColor = Color.FromArgb(192, 255, 192);
+            btnSave.Location = new Point(23, 423);
+            btnSave.Name = "btnSave";
+            btnSave.Size = new Size(94, 29);
+            btnSave.TabIndex = 14;
+            btnSave.Text = "Сохранить";
+            btnSave.UseVisualStyleBackColor = false;
+            // 
+            // btnCancel
+            // 
+            btnCancel.BackColor = Color.FromArgb(255, 192, 192);
+            btnCancel.Location = new Point(296, 423);
+            btnCancel.Name = "btnCancel";
+            btnCancel.Size = new Size(94, 29);
+            btnCancel.TabIndex = 15;
+            btnCancel.Text = "Отмена";
+            btnCancel.UseVisualStyleBackColor = false;
+            // 
+            // dateBDate
+            // 
+            dateBDate.Location = new Point(256, 149);
+            dateBDate.Name = "dateBDate";
+            dateBDate.Size = new Size(212, 27);
+            dateBDate.TabIndex = 16;
+            // 
+            // comboBox1
+            // 
+            comboBox1.FormattingEnabled = true;
+            comboBox1.Items.AddRange(new object[] { "Мужской", "Женский" });
+            comboBox1.Location = new Point(256, 92);
+            comboBox1.Name = "comboBox1";
+            comboBox1.Size = new Size(212, 28);
+            comboBox1.TabIndex = 17;
+            // 
+            // txtFullName
+            // 
+            txtFullName.Location = new Point(178, 37);
+            txtFullName.Name = "txtFullName";
+            txtFullName.Size = new Size(290, 27);
+            txtFullName.TabIndex = 18;
+            // 
+            // EditForm
+            // 
+            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(545, 501);
+            Controls.Add(txtFullName);
+            Controls.Add(comboBox1);
+            Controls.Add(dateBDate);
+            Controls.Add(btnCancel);
+            Controls.Add(btnSave);
+            Controls.Add(numericRussian);
+            Controls.Add(label7);
+            Controls.Add(label6);
+            Controls.Add(cmbEduForm);
+            Controls.Add(label5);
+            Controls.Add(label4);
+            Controls.Add(label3);
+            Controls.Add(label2);
+            Controls.Add(label1);
+            Name = "EditForm";
+            Text = "EditForm";
+            ((System.ComponentModel.ISupportInitialize)numericRussian).EndInit();
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
+
+        private Label label1;
+        private TextBox txtFullName;
+        private Label label2;
+        private ComboBox comboBox1;
+        private Label label3;
+        private Label label4;
+        private Label label5;
+        private DateTimePicker dateTimePicker1;
+        private ComboBox cmbEduForm;
+        private NumericUpDown numericUpDown1;
+        private NumericUpDown numericUpDown2;
+        private Label label6;
+        private NumericUpDown numericRussian;
+        private Label label7;
+        private Button btnSave;
+        private Button btnCancel;
+        private DateTimePicker dateBDate;
     }
 }

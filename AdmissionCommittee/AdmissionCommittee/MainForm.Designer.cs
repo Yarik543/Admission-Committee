@@ -28,23 +28,24 @@
         /// </summary>
         private void InitializeComponent()
         {
-            dataGridView1 = new DataGridView();
+            dgvAdmission = new DataGridView();
             Addbtn = new Button();
             Editbtn = new Button();
             panel1 = new Panel();
             label1 = new Label();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dgvAdmission).BeginInit();
             panel1.SuspendLayout();
             SuspendLayout();
             // 
-            // dataGridView1
+            // dgvAdmission
             // 
-            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Location = new Point(0, 122);
-            dataGridView1.Name = "dataGridView1";
-            dataGridView1.RowHeadersWidth = 51;
-            dataGridView1.Size = new Size(843, 321);
-            dataGridView1.TabIndex = 0;
+            dgvAdmission.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            dgvAdmission.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvAdmission.Location = new Point(1, 126);
+            dgvAdmission.Name = "dgvAdmission";
+            dgvAdmission.RowHeadersWidth = 51;
+            dgvAdmission.Size = new Size(836, 321);
+            dgvAdmission.TabIndex = 0;
             // 
             // Addbtn
             // 
@@ -55,6 +56,7 @@
             Addbtn.TabIndex = 1;
             Addbtn.Text = "Добавить";
             Addbtn.UseVisualStyleBackColor = false;
+            Addbtn.Click += Addbtn_Click;
             // 
             // Editbtn
             // 
@@ -73,7 +75,7 @@
             panel1.Dock = DockStyle.Top;
             panel1.Location = new Point(0, 0);
             panel1.Name = "panel1";
-            panel1.Size = new Size(843, 125);
+            panel1.Size = new Size(836, 125);
             panel1.TabIndex = 3;
             // 
             // label1
@@ -90,15 +92,15 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(843, 529);
+            ClientSize = new Size(836, 529);
             Controls.Add(panel1);
             Controls.Add(Editbtn);
             Controls.Add(Addbtn);
-            Controls.Add(dataGridView1);
+            Controls.Add(dgvAdmission);
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Приемная комиссия";
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dgvAdmission).EndInit();
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             ResumeLayout(false);
@@ -106,7 +108,7 @@
 
         #endregion
 
-        private DataGridView dataGridView1;
+        private DataGridView dgvAdmission;
         private Button Addbtn;
         private Button Editbtn;
         private Panel panel1;
