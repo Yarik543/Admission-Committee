@@ -35,14 +35,18 @@
             label5 = new Label();
             cmbEduForm = new ComboBox();
             label6 = new Label();
-            numericRussian = new NumericUpDown();
+            this.numRussianScore = new NumericUpDown();
             label7 = new Label();
             btnSave = new Button();
             btnCancel = new Button();
             dateBDate = new DateTimePicker();
-            comboBox1 = new ComboBox();
+            cmbGender = new ComboBox();
             txtFullName = new TextBox();
-            ((System.ComponentModel.ISupportInitialize)numericRussian).BeginInit();
+            this.numMathScore = new NumericUpDown();
+            numInformaticsScore = new NumericUpDown();
+            ((System.ComponentModel.ISupportInitialize)this.numRussianScore).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)this.numMathScore).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numInformaticsScore).BeginInit();
             SuspendLayout();
             // 
             // label1
@@ -99,12 +103,6 @@
             cmbEduForm.Size = new Size(212, 28);
             cmbEduForm.TabIndex = 8;
             // 
-            // numericMath
-            // 
-            // 
-            // numericInfo
-            // 
-            // 
             // label6
             // 
             label6.AutoSize = true;
@@ -114,12 +112,12 @@
             label6.TabIndex = 10;
             label6.Text = "Баллы информатика";
             // 
-            // numericRussian
+            // numRussianScore
             // 
-            numericRussian.Location = new Point(256, 311);
-            numericRussian.Name = "numericRussian";
-            numericRussian.Size = new Size(212, 27);
-            numericRussian.TabIndex = 13;
+            this.numRussianScore.Location = new Point(256, 311);
+            this.numRussianScore.Name = "numRussianScore";
+            this.numRussianScore.Size = new Size(212, 27);
+            this.numRussianScore.TabIndex = 13;
             // 
             // label7
             // 
@@ -157,14 +155,14 @@
             dateBDate.Size = new Size(212, 27);
             dateBDate.TabIndex = 16;
             // 
-            // comboBox1
+            // cmdGender
             // 
-            comboBox1.FormattingEnabled = true;
-            comboBox1.Items.AddRange(new object[] { "Мужской", "Женский" });
-            comboBox1.Location = new Point(256, 92);
-            comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(212, 28);
-            comboBox1.TabIndex = 17;
+            cmbGender.FormattingEnabled = true;
+            cmbGender.Items.AddRange(new object[] { "Мужской", "Женский" });
+            cmbGender.Location = new Point(256, 92);
+            cmbGender.Name = "cmdGender";
+            cmbGender.Size = new Size(212, 28);
+            cmbGender.TabIndex = 17;
             // 
             // txtFullName
             // 
@@ -173,17 +171,33 @@
             txtFullName.Size = new Size(290, 27);
             txtFullName.TabIndex = 18;
             // 
+            // numMathScore
+            // 
+            this.numMathScore.Location = new Point(256, 259);
+            this.numMathScore.Name = "numMathScore";
+            this.numMathScore.Size = new Size(212, 27);
+            this.numMathScore.TabIndex = 19;
+            // 
+            // numInformaticsScore
+            // 
+            numInformaticsScore.Location = new Point(256, 357);
+            numInformaticsScore.Name = "numInformaticsScore";
+            numInformaticsScore.Size = new Size(212, 27);
+            numInformaticsScore.TabIndex = 20;
+            // 
             // EditForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(545, 501);
+            Controls.Add(numInformaticsScore);
+            Controls.Add(this.numMathScore);
             Controls.Add(txtFullName);
-            Controls.Add(comboBox1);
+            Controls.Add(cmbGender);
             Controls.Add(dateBDate);
             Controls.Add(btnCancel);
             Controls.Add(btnSave);
-            Controls.Add(numericRussian);
+            Controls.Add(this.numRussianScore);
             Controls.Add(label7);
             Controls.Add(label6);
             Controls.Add(cmbEduForm);
@@ -194,7 +208,9 @@
             Controls.Add(label1);
             Name = "EditForm";
             Text = "EditForm";
-            ((System.ComponentModel.ISupportInitialize)numericRussian).EndInit();
+            ((System.ComponentModel.ISupportInitialize)this.numRussianScore).EndInit();
+            ((System.ComponentModel.ISupportInitialize)this.numMathScore).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numInformaticsScore).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -202,21 +218,23 @@
         #endregion
 
         private Label label1;
-        private TextBox txtFullName;
         private Label label2;
-        private ComboBox comboBox1;
         private Label label3;
         private Label label4;
         private Label label5;
-        private DateTimePicker dateTimePicker1;
-        private ComboBox cmbEduForm;
-        private NumericUpDown numericUpDown1;
-        private NumericUpDown numericUpDown2;
         private Label label6;
-        private NumericUpDown numericRussian;
         private Label label7;
+
+        private TextBox txtFullName;
+        private ComboBox cmbGender;
+        private DateTimePicker dateBDate;
+        private ComboBox cmbEduForm;
+
+        private NumericUpDown numMathScore;
+        private NumericUpDown numRussianScore;
+        private NumericUpDown numInformaticsScore;
+
         private Button btnSave;
         private Button btnCancel;
-        private DateTimePicker dateBDate;
     }
 }
