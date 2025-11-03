@@ -35,17 +35,17 @@
             label5 = new Label();
             cmbEduForm = new ComboBox();
             label6 = new Label();
-            this.numRussianScore = new NumericUpDown();
+            numRussianScore = new NumericUpDown();
             label7 = new Label();
             btnSave = new Button();
             btnCancel = new Button();
             dateBDate = new DateTimePicker();
             cmbGender = new ComboBox();
             txtFullName = new TextBox();
-            this.numMathScore = new NumericUpDown();
+            numMathScore = new NumericUpDown();
             numInformaticsScore = new NumericUpDown();
-            ((System.ComponentModel.ISupportInitialize)this.numRussianScore).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)this.numMathScore).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numRussianScore).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numMathScore).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numInformaticsScore).BeginInit();
             SuspendLayout();
             // 
@@ -114,10 +114,10 @@
             // 
             // numRussianScore
             // 
-            this.numRussianScore.Location = new Point(256, 311);
-            this.numRussianScore.Name = "numRussianScore";
-            this.numRussianScore.Size = new Size(212, 27);
-            this.numRussianScore.TabIndex = 13;
+            numRussianScore.Location = new Point(256, 311);
+            numRussianScore.Name = "numRussianScore";
+            numRussianScore.Size = new Size(212, 27);
+            numRussianScore.TabIndex = 13;
             // 
             // label7
             // 
@@ -137,6 +137,7 @@
             btnSave.TabIndex = 14;
             btnSave.Text = "Сохранить";
             btnSave.UseVisualStyleBackColor = false;
+            btnSave.Click += btnSave_Click;
             // 
             // btnCancel
             // 
@@ -147,6 +148,7 @@
             btnCancel.TabIndex = 15;
             btnCancel.Text = "Отмена";
             btnCancel.UseVisualStyleBackColor = false;
+            btnCancel.Click += btnCancel_Click;
             // 
             // dateBDate
             // 
@@ -155,12 +157,12 @@
             dateBDate.Size = new Size(212, 27);
             dateBDate.TabIndex = 16;
             // 
-            // cmdGender
+            // cmbGender
             // 
             cmbGender.FormattingEnabled = true;
             cmbGender.Items.AddRange(new object[] { "Мужской", "Женский" });
             cmbGender.Location = new Point(256, 92);
-            cmbGender.Name = "cmdGender";
+            cmbGender.Name = "cmbGender";
             cmbGender.Size = new Size(212, 28);
             cmbGender.TabIndex = 17;
             // 
@@ -173,10 +175,10 @@
             // 
             // numMathScore
             // 
-            this.numMathScore.Location = new Point(256, 259);
-            this.numMathScore.Name = "numMathScore";
-            this.numMathScore.Size = new Size(212, 27);
-            this.numMathScore.TabIndex = 19;
+            numMathScore.Location = new Point(256, 259);
+            numMathScore.Name = "numMathScore";
+            numMathScore.Size = new Size(212, 27);
+            numMathScore.TabIndex = 19;
             // 
             // numInformaticsScore
             // 
@@ -191,13 +193,13 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(545, 501);
             Controls.Add(numInformaticsScore);
-            Controls.Add(this.numMathScore);
+            Controls.Add(numMathScore);
             Controls.Add(txtFullName);
             Controls.Add(cmbGender);
             Controls.Add(dateBDate);
             Controls.Add(btnCancel);
             Controls.Add(btnSave);
-            Controls.Add(this.numRussianScore);
+            Controls.Add(numRussianScore);
             Controls.Add(label7);
             Controls.Add(label6);
             Controls.Add(cmbEduForm);
@@ -207,9 +209,9 @@
             Controls.Add(label2);
             Controls.Add(label1);
             Name = "EditForm";
-            Text = "EditForm";
-            ((System.ComponentModel.ISupportInitialize)this.numRussianScore).EndInit();
-            ((System.ComponentModel.ISupportInitialize)this.numMathScore).EndInit();
+            Text = "Форма редактирования/добавления";
+            ((System.ComponentModel.ISupportInitialize)numRussianScore).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numMathScore).EndInit();
             ((System.ComponentModel.ISupportInitialize)numInformaticsScore).EndInit();
             ResumeLayout(false);
             PerformLayout();

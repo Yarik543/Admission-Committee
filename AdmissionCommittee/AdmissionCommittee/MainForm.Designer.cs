@@ -33,6 +33,9 @@
             Editbtn = new Button();
             panel1 = new Panel();
             label1 = new Label();
+            DeleteBtn = new Button();
+            lblTotal = new Label();
+            lblPassed = new Label();
             ((System.ComponentModel.ISupportInitialize)dgvAdmission).BeginInit();
             panel1.SuspendLayout();
             SuspendLayout();
@@ -44,13 +47,13 @@
             dgvAdmission.Location = new Point(1, 126);
             dgvAdmission.Name = "dgvAdmission";
             dgvAdmission.RowHeadersWidth = 51;
-            dgvAdmission.Size = new Size(836, 321);
+            dgvAdmission.Size = new Size(893, 321);
             dgvAdmission.TabIndex = 0;
             // 
             // Addbtn
             // 
             Addbtn.BackColor = SystemColors.ActiveCaption;
-            Addbtn.Location = new Point(12, 464);
+            Addbtn.Location = new Point(12, 510);
             Addbtn.Name = "Addbtn";
             Addbtn.Size = new Size(94, 29);
             Addbtn.TabIndex = 1;
@@ -61,12 +64,13 @@
             // Editbtn
             // 
             Editbtn.BackColor = Color.FromArgb(192, 192, 0);
-            Editbtn.Location = new Point(698, 464);
+            Editbtn.Location = new Point(697, 510);
             Editbtn.Name = "Editbtn";
             Editbtn.Size = new Size(123, 29);
             Editbtn.TabIndex = 2;
             Editbtn.Text = "Редактировать";
             Editbtn.UseVisualStyleBackColor = false;
+            Editbtn.Click += Editbtn_Click;
             // 
             // panel1
             // 
@@ -75,7 +79,7 @@
             panel1.Dock = DockStyle.Top;
             panel1.Location = new Point(0, 0);
             panel1.Name = "panel1";
-            panel1.Size = new Size(836, 125);
+            panel1.Size = new Size(894, 125);
             panel1.TabIndex = 3;
             // 
             // label1
@@ -88,11 +92,43 @@
             label1.TabIndex = 0;
             label1.Text = "Приемная комиссия";
             // 
+            // DeleteBtn
+            // 
+            DeleteBtn.BackColor = Color.OrangeRed;
+            DeleteBtn.Location = new Point(349, 510);
+            DeleteBtn.Name = "DeleteBtn";
+            DeleteBtn.Size = new Size(169, 29);
+            DeleteBtn.TabIndex = 4;
+            DeleteBtn.Text = "Удалить";
+            DeleteBtn.UseVisualStyleBackColor = false;
+            DeleteBtn.Click += DeleteBtn_Click;
+            // 
+            // lblTotal
+            // 
+            lblTotal.AutoSize = true;
+            lblTotal.Location = new Point(12, 468);
+            lblTotal.Name = "lblTotal";
+            lblTotal.Size = new Size(50, 20);
+            lblTotal.TabIndex = 5;
+            lblTotal.Text = "label2";
+            // 
+            // lblPassed
+            // 
+            lblPassed.AutoSize = true;
+            lblPassed.Location = new Point(363, 468);
+            lblPassed.Name = "lblPassed";
+            lblPassed.Size = new Size(50, 20);
+            lblPassed.TabIndex = 6;
+            lblPassed.Text = "label2";
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(836, 529);
+            ClientSize = new Size(894, 551);
+            Controls.Add(lblPassed);
+            Controls.Add(lblTotal);
+            Controls.Add(DeleteBtn);
             Controls.Add(panel1);
             Controls.Add(Editbtn);
             Controls.Add(Addbtn);
@@ -104,6 +140,7 @@
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -113,5 +150,8 @@
         private Button Editbtn;
         private Panel panel1;
         private Label label1;
+        private Button DeleteBtn;
+        private Label lblTotal;
+        private Label lblPassed;
     }
 }
