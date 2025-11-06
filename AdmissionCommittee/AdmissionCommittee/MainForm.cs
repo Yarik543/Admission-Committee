@@ -2,6 +2,7 @@
 using System;
 using System.ComponentModel;
 using System.Linq;
+using System.Text.Json;
 using System.Windows.Forms;
 
 namespace AdmissionCommittee
@@ -10,13 +11,25 @@ namespace AdmissionCommittee
     {
 
         private BindingList<Applicant> applicants = new BindingList<Applicant>();
+
+        private readonly string dataFile = "applicants.json";
         public MainForm()
         {
             InitializeComponent();
+            InitGrid();
+            LoadData();
+            UpdateStats();
 
+        }
+
+        private void InitGrid()
+        {
             dgvAdmission.AutoGenerateColumns = false;
+            dgvAdmission.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvAdmission.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvAdmission.MultiSelect = false;
+            dgvAdmission.ReadOnly = true;
 
-            // Настройка колонок грида
             dgvAdmission.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "FullName", HeaderText = "ФИО" });
             dgvAdmission.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Gender", HeaderText = "Пол" });
             dgvAdmission.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "BirthDate", HeaderText = "Дата рождения" });
@@ -27,20 +40,30 @@ namespace AdmissionCommittee
             dgvAdmission.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "TotalScore", HeaderText = "Сумма" });
 
             dgvAdmission.DataSource = applicants;
+        }
 
-            // Добавим тестовую запись
-            applicants.Add(new Applicant
+        private void LoadData()
+        {
+            if (File.Exists(dataFile))
             {
-                FullName = "Иванов Иван Иванович",
-                Gender = "Мужской",
-                BirthDate = new DateTime(2005, 3, 14),
-                EduForm = "Очное",
-                MathScore = 60,
-                RusScore = 45,
-                ITScore = 65
-            });
+                var json = File.ReadAllText(dataFile);
+                var list = JsonSerializer.Deserialize<BindingList<Applicant>>(json);
+                applicants = list ?? new BindingList<Applicant>();
+                dgvAdmission.DataSource = applicants;
+            }
+            else
+            {
+                // если файла нет — создаём пустой список
+                applicants = new BindingList<Applicant>();
+            }
 
-            UpdateStats();
+            dgvAdmission.DataSource = applicants;
+        }
+
+        private void SaveData()
+        {
+            var json = JsonSerializer.Serialize(applicants, new JsonSerializerOptions { WriteIndented = true });
+            File.WriteAllText(dataFile, json);
         }
 
         private void Addbtn_Click(object sender, EventArgs e)
@@ -49,6 +72,7 @@ namespace AdmissionCommittee
             if (form.ShowDialog() == DialogResult.OK)
             {
                 applicants.Add(form.ApplicantData);
+                SaveData();
                 UpdateStats();
             }
         }
@@ -61,10 +85,10 @@ namespace AdmissionCommittee
             var form = new EditForm(selected);
             if (form.ShowDialog() == DialogResult.OK)
             {
-                // Обновляем объект в BindingList
                 var index = applicants.IndexOf(selected);
                 applicants[index] = form.ApplicantData;
                 dgvAdmission.Refresh();
+                SaveData();
                 UpdateStats();
             }
         }
@@ -78,6 +102,7 @@ namespace AdmissionCommittee
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 applicants.Remove(selected);
+                SaveData();
                 UpdateStats();
             }
         }
@@ -86,6 +111,12 @@ namespace AdmissionCommittee
         {
             lblTotal.Text = $"Всего абитуриентов: {applicants.Count}";
             lblPassed.Text = $"Прошли (сумма >150): {applicants.Count(a => a.TotalScore > 150)}";
+        }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            SaveData();
+            base.OnFormClosing(e);
         }
     }
 }

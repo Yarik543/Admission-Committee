@@ -28,10 +28,40 @@ namespace AdmissionCommittee
             ApplicantData = existing;
         }
 
+        private bool ValidateInput()
+        {
+            if (string.IsNullOrWhiteSpace(txtFullName.Text))
+            {
+                MessageBox.Show("Введите ФИО.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(cmbGender.Text))
+            {
+                MessageBox.Show("Выберите пол.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(cmbEduForm.Text))
+            {
+                MessageBox.Show("Выберите форму обучения.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            if (numMathScore.Value <= 0 || numRussianScore.Value <= 0 || numInformaticsScore.Value <= 0)
+            {
+                MessageBox.Show("Баллы должны быть больше 0.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            return true;
+        }
+
         private void btnSave_Click(object sender, EventArgs e)
         {
-            // Присваиваем данные в объект
-            ApplicantData.FullName = txtFullName.Text;
+            if (!ValidateInput()) return;
+
+            ApplicantData.FullName = txtFullName.Text.Trim();
             ApplicantData.Gender = cmbGender.Text;
             ApplicantData.BirthDate = dateBDate.Value;
             ApplicantData.EduForm = cmbEduForm.Text;
