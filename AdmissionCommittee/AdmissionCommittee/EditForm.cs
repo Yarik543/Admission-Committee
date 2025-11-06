@@ -59,7 +59,10 @@ namespace AdmissionCommittee
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            if (!ValidateInput()) return;
+            if (!ValidateInput())
+            {
+                return;
+            }
 
             ApplicantData.FullName = txtFullName.Text.Trim();
             ApplicantData.Gender = cmbGender.Text;
