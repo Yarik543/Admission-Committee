@@ -96,6 +96,7 @@
             // 
             // cmbEduForm
             // 
+            cmbEduForm.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbEduForm.FormattingEnabled = true;
             cmbEduForm.Items.AddRange(new object[] { "Очное", "Очно-заочное", "Заочное" });
             cmbEduForm.Location = new Point(256, 210);
@@ -159,6 +160,7 @@
             // 
             // cmbGender
             // 
+            cmbGender.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbGender.FormattingEnabled = true;
             cmbGender.Items.AddRange(new object[] { "Мужской", "Женский" });
             cmbGender.Location = new Point(256, 92);

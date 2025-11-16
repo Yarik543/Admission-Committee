@@ -1,5 +1,6 @@
 ﻿using AdmissionCommittee.Models;
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Windows.Forms;
 
 namespace AdmissionCommittee
@@ -8,76 +9,70 @@ namespace AdmissionCommittee
     {
         public Applicant ApplicantData { get; private set; }
 
-        public EditForm()
+        public EditForm(Applicant? existing = null)
         {
             InitializeComponent();
-            ApplicantData = new Applicant();
+            cmbEduForm.SelectedIndex = 0;
+            cmbGender.SelectedIndex = 0;
+
+            // если абитуриент передан — редактируем, иначе создаём нового
+            ApplicantData = existing ?? new Applicant();
+
+            // если редактируем — заполняем поля формы
+            if (existing != null)
+            {
+                txtFullName.Text = existing.FullName;
+                cmbGender.SelectedItem = existing.Gender;
+                dateBDate.Value = existing.BirthDate;
+                cmbEduForm.SelectedItem = existing.EduForm;
+                numMathScore.Value = existing.MathScore;
+                numRussianScore.Value = existing.RusScore;
+                numInformaticsScore.Value = existing.ITScore;
+            }
         }
 
-        public EditForm(Applicant existing) : this()
+        //Метод валидации модели через атрибуты
+        
+        private bool ValidateApplicant(Applicant applicant)
         {
-            // Заполняем поля данными
-            txtFullName.Text = existing.FullName;
-            cmbGender.SelectedItem = existing.Gender;
-            dateBDate.Value = existing.BirthDate;
-            cmbEduForm.SelectedItem = existing.EduForm;
-            numMathScore.Value = existing.MathScore;
-            numRussianScore.Value = existing.RusScore;
-            numInformaticsScore.Value = existing.ITScore;
+            var context = new ValidationContext(applicant);
+            var results = new List<ValidationResult>();
 
-            ApplicantData = existing;
-        }
+            bool valid = Validator.TryValidateObject(applicant, context, results, true);
 
-        private bool ValidateInput()
-        {
-            if (string.IsNullOrWhiteSpace(txtFullName.Text))
+            if (!valid)
             {
-                MessageBox.Show("Введите ФИО.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
+                string msg = string.Join("\n", results.Select(r => r.ErrorMessage));
+                MessageBox.Show(msg, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
 
-            if (string.IsNullOrWhiteSpace(cmbGender.Text))
-            {
-                MessageBox.Show("Выберите пол.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-
-            if (string.IsNullOrWhiteSpace(cmbEduForm.Text))
-            {
-                MessageBox.Show("Выберите форму обучения.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-
-            if (numMathScore.Value <= 0 || numRussianScore.Value <= 0 || numInformaticsScore.Value <= 0)
-            {
-                MessageBox.Show("Баллы должны быть больше 0.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-
-            return true;
+            return valid;
         }
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            if (!ValidateInput())
-            {
-                return;
-            }
 
-            ApplicantData.FullName = txtFullName.Text.Trim();
-            ApplicantData.Gender = cmbGender.Text;
+            ApplicantData.FullName = txtFullName.Text;
+            ApplicantData.Gender = cmbGender.SelectedItem.ToString();
             ApplicantData.BirthDate = dateBDate.Value;
-            ApplicantData.EduForm = cmbEduForm.Text;
+            ApplicantData.EduForm = cmbEduForm.SelectedItem.ToString();
             ApplicantData.MathScore = (int)numMathScore.Value;
             ApplicantData.RusScore = (int)numRussianScore.Value;
             ApplicantData.ITScore = (int)numInformaticsScore.Value;
 
+            //Проверяем модель через Validator
+            if (!ValidateApplicant(ApplicantData))
+            {
+                return; // ошибки уже 
+            }
             DialogResult = DialogResult.OK;
+            Close();
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
+            Close();
         }
     }
 }

@@ -30,6 +30,8 @@ namespace AdmissionCommittee
             dgvAdmission.MultiSelect = false;
             dgvAdmission.ReadOnly = true;
 
+            dgvAdmission.Columns.Clear();
+
             dgvAdmission.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "FullName", HeaderText = "ФИО" });
             dgvAdmission.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Gender", HeaderText = "Пол" });
             dgvAdmission.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "BirthDate", HeaderText = "Дата рождения" });
@@ -37,9 +39,29 @@ namespace AdmissionCommittee
             dgvAdmission.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "MathScore", HeaderText = "Математика" });
             dgvAdmission.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "RusScore", HeaderText = "Русский" });
             dgvAdmission.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "ITScore", HeaderText = "Информатика" });
-            dgvAdmission.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "TotalScore", HeaderText = "Сумма" });
 
+            // Добавляем вычисляемый столбец (без DataPropertyName)
+            dgvAdmission.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                HeaderText = "Сумма",
+                Name = "colTotalScore"
+            });
+
+            dgvAdmission.CellFormatting += dgvAdmission_CellFormatting;
             dgvAdmission.DataSource = applicants;
+        }
+
+        // Считаем сумму прямо при отображении строки
+        private void dgvAdmission_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (dgvAdmission.Columns[e.ColumnIndex].Name == "colTotalScore")
+            {
+                var applicant = dgvAdmission.Rows[e.RowIndex].DataBoundItem as Applicant;
+                if (applicant != null)
+                {
+                    e.Value = applicant.MathScore + applicant.RusScore + applicant.ITScore;
+                }
+            }
         }
 
         private void LoadData()
@@ -49,7 +71,6 @@ namespace AdmissionCommittee
                 var json = File.ReadAllText(dataFile);
                 var list = JsonSerializer.Deserialize<BindingList<Applicant>>(json);
                 applicants = list ?? new BindingList<Applicant>();
-                dgvAdmission.DataSource = applicants;
             }
             else
             {
@@ -66,14 +87,19 @@ namespace AdmissionCommittee
             File.WriteAllText(dataFile, json);
         }
 
+        private void AfterDataChenged()
+        {
+            SaveData();
+            UpdateStats();
+        }
+
         private void Addbtn_Click(object sender, EventArgs e)
         {
             var form = new EditForm();
             if (form.ShowDialog() == DialogResult.OK)
             {
                 applicants.Add(form.ApplicantData);
-                SaveData();
-                UpdateStats();
+                AfterDataChenged();
             }
         }
 
@@ -88,8 +114,7 @@ namespace AdmissionCommittee
                 var index = applicants.IndexOf(selected);
                 applicants[index] = form.ApplicantData;
                 dgvAdmission.Refresh();
-                SaveData();
-                UpdateStats();
+                AfterDataChenged();
             }
         }
 
@@ -102,15 +127,14 @@ namespace AdmissionCommittee
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 applicants.Remove(selected);
-                SaveData();
-                UpdateStats();
+                AfterDataChenged();
             }
         }
 
         private void UpdateStats()
         {
             lblTotal.Text = $"Всего абитуриентов: {applicants.Count}";
-            lblPassed.Text = $"Прошли (сумма >150): {applicants.Count(a => a.TotalScore > 150)}";
+            lblPassed.Text = $"Прошли (сумма >150): {applicants.Count(a => a.MathScore + a.RusScore + a.ITScore > 150)}";
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
