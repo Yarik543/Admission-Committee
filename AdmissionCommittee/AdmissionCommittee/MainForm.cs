@@ -19,7 +19,6 @@ namespace AdmissionCommittee
             InitGrid();
             LoadData();
             UpdateStats();
-
         }
 
         private void InitGrid()

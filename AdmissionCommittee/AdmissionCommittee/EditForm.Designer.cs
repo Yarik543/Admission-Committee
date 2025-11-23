@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             label1 = new Label();
             label2 = new Label();
             label3 = new Label();
@@ -44,9 +45,11 @@
             txtFullName = new TextBox();
             numMathScore = new NumericUpDown();
             numInformaticsScore = new NumericUpDown();
+            errorProvider1 = new ErrorProvider(components);
             ((System.ComponentModel.ISupportInitialize)numRussianScore).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numMathScore).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numInformaticsScore).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)errorProvider1).BeginInit();
             SuspendLayout();
             // 
             // label1
@@ -189,6 +192,10 @@
             numInformaticsScore.Size = new Size(212, 27);
             numInformaticsScore.TabIndex = 20;
             // 
+            // errorProvider1
+            // 
+            errorProvider1.ContainerControl = this;
+            // 
             // EditForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -215,6 +222,7 @@
             ((System.ComponentModel.ISupportInitialize)numRussianScore).EndInit();
             ((System.ComponentModel.ISupportInitialize)numMathScore).EndInit();
             ((System.ComponentModel.ISupportInitialize)numInformaticsScore).EndInit();
+            ((System.ComponentModel.ISupportInitialize)errorProvider1).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -240,5 +248,6 @@
 
         private Button btnSave;
         private Button btnCancel;
+        private ErrorProvider errorProvider1;
     }
 }

@@ -10,8 +10,7 @@ namespace AdmissionCommittee
     {
         public Applicant ApplicantData { get; private set; }
 
-        private Applicant _workingCopy;
-        private ErrorProvider _errorProvider = new ErrorProvider();
+        private Applicant workingCopy;
 
         public EditForm(Applicant? existing = null)
         {
@@ -20,7 +19,7 @@ namespace AdmissionCommittee
             cmbGender.SelectedIndex = 0;
 
             // создаём копию, чтобы не трогать оригинал, пока пользователь не нажал OK
-            _workingCopy = existing != null
+            workingCopy = existing != null
                 ? new Applicant
                 {
                     FullName = existing.FullName,
@@ -34,30 +33,30 @@ namespace AdmissionCommittee
                 : new Applicant();
 
             //дата по умолчанию
-            if (_workingCopy.BirthDate < dateBDate.MinDate)
-                _workingCopy.BirthDate = DateTime.Now.AddYears(-18);
+            if (workingCopy.BirthDate < dateBDate.MinDate)
+                workingCopy.BirthDate = DateTime.Now.AddYears(-18);
 
             //заполняем combobox
             if (existing == null)
             {
-                _workingCopy.Gender = cmbGender.Items[0].ToString();
-                _workingCopy.EduForm = cmbEduForm.Items[0].ToString();
+                workingCopy.Gender = cmbGender.Items[0].ToString();
+                workingCopy.EduForm = cmbEduForm.Items[0].ToString();
             }
 
-            ApplicantData = _workingCopy;
+            ApplicantData = workingCopy;
 
             InitBindings();
         }
 
         private void InitBindings()
         {
-            txtFullName.BindControl(ApplicantData, c => c.Text, m => m.FullName, _errorProvider);
-            cmbGender.BindControl(ApplicantData, c => c.Text, m => m.Gender, _errorProvider);
-            dateBDate.BindControl(ApplicantData, c => c.Value, m => m.BirthDate, _errorProvider);
-            cmbEduForm.BindControl(ApplicantData, c => c.Text, m => m.EduForm, _errorProvider);
-            numMathScore.BindControl(ApplicantData, c => c.Value, m => m.MathScore, _errorProvider);
-            numRussianScore.BindControl(ApplicantData, c => c.Value, m => m.RusScore, _errorProvider);
-            numInformaticsScore.BindControl(ApplicantData, c => c.Value, m => m.ITScore, _errorProvider);
+            txtFullName.BindControl(ApplicantData, c => c.Text, m => m.FullName, errorProvider1);
+            cmbGender.BindControl(ApplicantData, c => c.Text, m => m.Gender, errorProvider1);
+            dateBDate.BindControl(ApplicantData, c => c.Value, m => m.BirthDate, errorProvider1);
+            cmbEduForm.BindControl(ApplicantData, c => c.Text, m => m.EduForm, errorProvider1);
+            numMathScore.BindControl(ApplicantData, c => c.Value, m => m.MathScore, errorProvider1);
+            numRussianScore.BindControl(ApplicantData, c => c.Value, m => m.RusScore, errorProvider1);
+            numInformaticsScore.BindControl(ApplicantData, c => c.Value, m => m.ITScore, errorProvider1);
         }
 
         //Метод валидации модели через атрибуты

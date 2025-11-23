@@ -1,5 +1,7 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Windows.Forms;
 
 
@@ -32,13 +34,24 @@ namespace AdmissionCommittee.Extensions
 
             if (provider != null)
             {
-                binding.BindingComplete += (s, e) =>
+                var sourcePropertyInfo = model.GetType().GetProperty(modelPropertyName);
+                var validationAttributes = sourcePropertyInfo?.GetCustomAttributes<ValidationAttribute>();
+                if (validationAttributes?.Any() == true)
                 {
-                    if (string.IsNullOrEmpty(e.ErrorText))
-                        provider.SetError(control, "");
-                    else
-                        provider.SetError(control, e.ErrorText);
-                };
+                    control.Validating += (o, args) =>
+                    {
+                        var context = new ValidationContext(model);
+                        var results = new List<ValidationResult>();
+                        provider.SetError(control, string.Empty);
+                        if (!Validator.TryValidateObject(model, context, results, true))
+                        {
+                            foreach (var error in results.Where(x => x.MemberNames.Contains(modelPropertyName)))
+                            {
+                                provider.SetError(control, error.ErrorMessage);
+                            }
+                        }
+                    };
+                }
             }
 
             control.DataBindings.Add(binding);
