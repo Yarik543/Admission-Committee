@@ -1,5 +1,5 @@
 ﻿using AdmissionCommittee.Extensions;
-using AdmissionCommittee.Models;
+using AdmissionCommittee.Domain.Entities;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Windows.Forms;
