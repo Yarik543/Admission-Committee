@@ -8,14 +8,4 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\AdmissionCommittee.Domain\AdmissionCommittee.Domain.csproj" />
-    <ProjectReference Include="..\AdmissionCommittee.Abstractions\AdmissionCommittee.Abstractions.csproj" />
-    <ProjectReference Include="..\AdmissionCommittee.Data.Memory\AdmissionCommittee.Data.Memory.csproj" />
-  </ItemGroup>
-
 </Project>

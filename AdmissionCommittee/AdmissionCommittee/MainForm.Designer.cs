@@ -59,7 +59,7 @@
             Addbtn.TabIndex = 1;
             Addbtn.Text = "Добавить";
             Addbtn.UseVisualStyleBackColor = false;
-            Addbtn.Click += Addbtn_Click;
+            Addbtn.Click += Addbtn_Click_1;
             // 
             // Editbtn
             // 

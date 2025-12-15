@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\AdmissionCommittee.Abstractions\AdmissionCommittee.Abstractions.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

@@ -1,9 +1,7 @@
-﻿namespace AdmissionCommittee.Abstractions.Contracts
+﻿namespace AdmissionCommittee.Models
 {
-    public class ApplicantDto
+    public class Applicant
     {
-        public Guid Id { get; set; } = Guid.NewGuid();
-
         public string FullName { get; set; }
         public string Gender { get; set; }
         public DateTime BirthDate { get; set; }
