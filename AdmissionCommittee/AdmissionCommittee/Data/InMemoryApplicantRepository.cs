@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel;
-using AdmissionCommittee.Models;
+using AdmissionCommittee.Domain.Entities;
 
 namespace AdmissionCommittee.Data
 {
-    public class InMemoryApplicantRepository
+    public class InMemoryApplicantRepository 
     {
         private readonly BindingList<Applicant> applicants = new();
 

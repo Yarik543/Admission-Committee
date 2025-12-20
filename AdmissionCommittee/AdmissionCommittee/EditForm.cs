@@ -1,4 +1,4 @@
-﻿using AdmissionCommittee.Models;
+﻿using AdmissionCommittee.Domain.Entities;
 using System;
 using System.Windows.Forms;
 

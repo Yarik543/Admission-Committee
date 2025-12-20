@@ -1,64 +1,38 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AdmissionCommittee.Domain.Entities
 {
     /// <summary>
-    /// Информация об абитуриенте
+    /// Абитуриент приёмной комиссии
     /// </summary>
     public class Applicant
     {
-        /// <summary>
-        /// ФИО
-        /// </summary>
-        [Required(ErrorMessage = "Поле {0} обязательно.")]
+        [Required(ErrorMessage = "Поле «{0}» обязательно.")]
         [Display(Name = "ФИО")]
-        public string FullName { get; set; }
+        public string FullName { get; set; } = string.Empty;
 
-        /// <summary>
-        /// Пол
-        /// </summary>
-        [Required(ErrorMessage = "Поле {0} обязательно.")]
+        [Required(ErrorMessage = "Поле «{0}» обязательно.")]
         [Display(Name = "Пол")]
-        public string Gender { get; set; }
+        public string Gender { get; set; } = string.Empty;
 
-        /// <summary>
-        /// Дата рождения
-        /// </summary>
-        [Required(ErrorMessage = "Поле {0} обязательно.")]
         [Display(Name = "Дата рождения")]
-        public DateTime BirthDate { get; set; }
+        public DateTime BirthDate { get; set; } = DateTime.Today.AddYears(-18);
 
-        /// <summary>
-        /// Форма обучения
-        /// </summary>
-        [Required(ErrorMessage = "Поле {0} обязательно.")]
+        [Required(ErrorMessage = "Поле «{0}» обязательно.")]
         [Display(Name = "Форма обучения")]
-        public string EduForm { get; set; }
+        public string EduForm { get; set; } = string.Empty;
 
-        /// <summary>
-        /// Баллы математика
-        /// </summary>
         [Range(1, 100, ErrorMessage = "{0} должен быть от {1} до {2}.")]
-        [Display(Name = "Баллы по математике")]
+        [Display(Name = "Математика")]
         public int MathScore { get; set; }
 
-        /// <summary>
-        /// Баллы русский
-        /// </summary>
         [Range(1, 100, ErrorMessage = "{0} должен быть от {1} до {2}.")]
-        [Display(Name = "Баллы по русскому")]
+        [Display(Name = "Русский язык")]
         public int RusScore { get; set; }
 
-        /// <summary>
-        /// Баллы информатика
-        /// </summary>
         [Range(1, 100, ErrorMessage = "{0} должен быть от {1} до {2}.")]
-        [Display(Name = "Баллы по информатике")]
+        [Display(Name = "Информатика")]
         public int ITScore { get; set; }
     }
 }

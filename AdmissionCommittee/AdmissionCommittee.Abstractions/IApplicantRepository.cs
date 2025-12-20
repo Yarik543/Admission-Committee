@@ -1,14 +1,11 @@
-﻿using AdmissionCommittee.Abstractions.Contracts;
+﻿using AdmissionCommittee.Domain.Entities;
 
-namespace AdmissionCommittee.Abstractions
+namespace AdmissionCommittee.Abstractions;
+
+public interface IApplicantRepository
 {
-    public interface IApplicantRepository
-    {
-        IEnumerable<ApplicantDto> GetAll();
-        ApplicantDto? GetById(Guid id);
-
-        void Add(ApplicantDto applicant);
-        void Update(ApplicantDto applicant);
-        void Delete(Guid id);
-    }
+    IReadOnlyList<Applicant> GetAll();
+    void Add(Applicant applicant);
+    void Update(Applicant applicant);
+    void Delete(Applicant applicant);
 }
