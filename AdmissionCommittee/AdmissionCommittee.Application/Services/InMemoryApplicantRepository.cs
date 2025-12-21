@@ -4,9 +4,9 @@ using System.Linq;
 using AdmissionCommittee.Abstractions.Repositories;
 using AdmissionCommittee.Domain.Entities;
 
-namespace AdmissionCommittee.Data.Memory.Repositories
+namespace AdmissionCommittee.Application.Services
 {
-    public class InMemoryApplicantRepository : IApplicantRepository
+    internal class InMemoryApplicantRepository : IApplicantRepository
     {
         private readonly List<Applicant> _items = new();
 
@@ -25,7 +25,7 @@ namespace AdmissionCommittee.Data.Memory.Repositories
 
         public void Update(Applicant applicant)
         {
-            // объект уже обновлён по ссылке
+            // Объект обновляется по ссылке
         }
 
         public void Remove(Guid id)

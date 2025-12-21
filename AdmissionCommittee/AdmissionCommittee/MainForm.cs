@@ -1,20 +1,22 @@
-﻿using AdmissionCommittee.Abstractions;
-using AdmissionCommittee.Data.Memory.Repositories;
+﻿using AdmissionCommittee.Abstractions.Services;
 using AdmissionCommittee.Domain.Entities;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
+using AdmissionCommittee.Application.Services;
 
 namespace AdmissionCommittee
 {
     public partial class MainForm : Form
     {
-        private readonly InMemoryApplicantRepository repository = new();
-
         private BindingList<Applicant> applicants = new();
+
+        private readonly IApplicantService service;
+
         public MainForm()
         {
             InitializeComponent();
+            service = ServiceFactory.CreateApplicantService();
             InitGrid();
             LoadData();
             UpdateStats();
@@ -78,7 +80,7 @@ namespace AdmissionCommittee
 
         private void LoadData()
         {
-            var list = repository.GetAll();
+            var list = service.GetAll();
 
             applicants = new BindingList<Applicant>(list.ToList());
             dgvAdmission.DataSource = applicants;
@@ -125,14 +127,14 @@ namespace AdmissionCommittee
             if (confirm != DialogResult.Yes)
                 return;
 
-            repository.Remove(selected.Id);
+            service.Remove(selected.Id);
             LoadData();
             UpdateStats();
         }
 
         private void UpdateStats()
         {
-            var all = repository.GetAll();
+            var all = service.GetAll();
 
             lblTotal.Text = $"Всего абитуриентов: {all.Count}";
             lblPassed.Text = $"Прошли (сумма > 150): {all.Count(a =>
@@ -150,7 +152,7 @@ namespace AdmissionCommittee
 
             if (form.ShowDialog() == DialogResult.OK)
             {
-                repository.Add(form.ApplicantData);
+                service.Add(form.ApplicantData);
                 LoadData();
                 UpdateStats();
             }
