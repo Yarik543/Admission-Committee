@@ -9,6 +9,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AdmissionCommittee.Data.Memory" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AdmissionCommittee.Abstractions\AdmissionCommittee.Abstractions.csproj" />
     <ProjectReference Include="..\AdmissionCommittee.Domain\AdmissionCommittee.Domain.csproj" />
   </ItemGroup>
 

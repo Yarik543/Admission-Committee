@@ -160,6 +160,7 @@
             dateBDate.Name = "dateBDate";
             dateBDate.Size = new Size(212, 27);
             dateBDate.TabIndex = 16;
+            dateBDate.ValueChanged += dateBDate_ValueChanged;
             // 
             // cmbGender
             // 

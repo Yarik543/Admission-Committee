@@ -1,6 +1,7 @@
 ﻿using AdmissionCommittee.Domain.Entities;
 using System;
 using System.Windows.Forms;
+using AdmissionCommittee.Abstractions;
 
 namespace AdmissionCommittee
 {
@@ -13,13 +14,16 @@ namespace AdmissionCommittee
         {
             InitializeComponent();
 
+            dateBDate.Format = DateTimePickerFormat.Custom;
+            dateBDate.CustomFormat = " ";
+
             ApplicantData = existing ?? new Applicant();
 
             if (existing != null)
             {
+                dateBDate.Format = DateTimePickerFormat.Short;
                 txtFullName.Text = existing.FullName;
                 cmbGender.SelectedItem = existing.Gender;
-                dateBDate.Value = existing.BirthDate;
                 cmbEduForm.SelectedItem = existing.EduForm;
                 numMathScore.Value = existing.MathScore;
                 numRussianScore.Value = existing.RusScore;
@@ -56,5 +60,12 @@ namespace AdmissionCommittee
             DialogResult = DialogResult.Cancel;
             Close();
         }
-    }
+
+        private void dateBDate_ValueChanged(object sender, EventArgs e)
+        {
+            dateBDate.Format = DateTimePickerFormat.Short;
+            ApplicantData.BirthDate = dateBDate.Value;
+        }
+
+}
 }

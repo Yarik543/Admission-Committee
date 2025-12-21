@@ -1,4 +1,5 @@
-﻿using AdmissionCommittee.Data;
+﻿using AdmissionCommittee.Abstractions;
+using AdmissionCommittee.Data.Memory.Repositories;
 using AdmissionCommittee.Domain.Entities;
 using System.ComponentModel;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace AdmissionCommittee
     {
         private readonly InMemoryApplicantRepository repository = new();
 
-        private BindingList<Applicant> applicants;
+        private BindingList<Applicant> applicants = new();
         public MainForm()
         {
             InitializeComponent();
@@ -38,6 +39,13 @@ namespace AdmissionCommittee
             dgvAdmission.Columns.Add(new DataGridViewTextBoxColumn
             {
                 DataPropertyName = "Gender", HeaderText = "Пол"
+            });
+
+            dgvAdmission.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                DataPropertyName = nameof(Applicant.BirthDate),
+                HeaderText = "Дата рождения",
+                DefaultCellStyle = { Format = "dd.MM.yyyy" }
             });
 
             dgvAdmission.Columns.Add(new DataGridViewTextBoxColumn
@@ -70,7 +78,9 @@ namespace AdmissionCommittee
 
         private void LoadData()
         {
-            applicants = repository.GetAll();
+            var list = repository.GetAll();
+
+            applicants = new BindingList<Applicant>(list.ToList());
             dgvAdmission.DataSource = applicants;
         }
 
@@ -96,7 +106,7 @@ namespace AdmissionCommittee
 
             if (form.ShowDialog() == DialogResult.OK)
             {
-                dgvAdmission.Refresh();
+                LoadData();
                 UpdateStats();
             }
         }
@@ -111,21 +121,22 @@ namespace AdmissionCommittee
                 "Подтверждение",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question);
-            if (confirm == DialogResult.Yes)
-            {
-                repository.Delete(selected);
-                UpdateStats();
-            }
+
+            if (confirm != DialogResult.Yes)
+                return;
+
+            repository.Remove(selected.Id);
+            LoadData();
+            UpdateStats();
         }
 
         private void UpdateStats()
         {
-            lblTotal.Text = $"Всего абитуриентов: {applicants.Count}";
+            var all = repository.GetAll();
 
-            int passed = applicants.Count(a =>
-                a.MathScore + a.RusScore + a.ITScore > 150);
-
-            lblPassed.Text = $"Прошли (сумма > 150): {passed}";
+            lblTotal.Text = $"Всего абитуриентов: {all.Count}";
+            lblPassed.Text = $"Прошли (сумма > 150): {all.Count(a =>
+                a.MathScore + a.RusScore + a.ITScore > 150)}";
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
@@ -140,6 +151,7 @@ namespace AdmissionCommittee
             if (form.ShowDialog() == DialogResult.OK)
             {
                 repository.Add(form.ApplicantData);
+                LoadData();
                 UpdateStats();
             }
         }

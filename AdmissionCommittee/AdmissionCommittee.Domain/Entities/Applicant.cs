@@ -8,6 +8,9 @@ namespace AdmissionCommittee.Domain.Entities
     /// </summary>
     public class Applicant
     {
+
+        public Guid Id { get; set; } = Guid.NewGuid();
+
         [Required(ErrorMessage = "Поле «{0}» обязательно.")]
         [Display(Name = "ФИО")]
         public string FullName { get; set; } = string.Empty;
@@ -17,7 +20,7 @@ namespace AdmissionCommittee.Domain.Entities
         public string Gender { get; set; } = string.Empty;
 
         [Display(Name = "Дата рождения")]
-        public DateTime BirthDate { get; set; } = DateTime.Today.AddYears(-18);
+        public DateTime? BirthDate { get; set; }
 
         [Required(ErrorMessage = "Поле «{0}» обязательно.")]
         [Display(Name = "Форма обучения")]
