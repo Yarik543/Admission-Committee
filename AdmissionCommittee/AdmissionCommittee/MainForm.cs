@@ -1,25 +1,31 @@
-﻿using AdmissionCommittee.Models;
-using System;
+﻿using AdmissionCommittee.Abstractions.Services;
+using AdmissionCommittee.Data.Memory.Repositories;
+using AdmissionCommittee.Domain.Entities;
+using AdmissionCommittee.Services;
 using System.ComponentModel;
 using System.Linq;
-using System.Text.Json;
 using System.Windows.Forms;
 
 namespace AdmissionCommittee
 {
     public partial class MainForm : Form
     {
+        private BindingList<Applicant> applicants = new();
+        private readonly IApplicantService service; // Сервис для работы с абитуриентами
 
-        private BindingList<Applicant> applicants = new BindingList<Applicant>();
-
-        private readonly string dataFile = "applicants.json";
         public MainForm()
         {
             InitializeComponent();
+
+            // Создаём репозиторий из NuGet-пакета
+            var repository = new InMemoryApplicantRepository(); // класс из NuGet
+            service = new ApplicantService(repository);
+
             InitGrid();
             LoadData();
             UpdateStats();
         }
+
 
         private void InitGrid()
         {
@@ -31,115 +37,126 @@ namespace AdmissionCommittee
 
             dgvAdmission.Columns.Clear();
 
-            dgvAdmission.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "FullName", HeaderText = "ФИО" });
-            dgvAdmission.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Gender", HeaderText = "Пол" });
-            dgvAdmission.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "BirthDate", HeaderText = "Дата рождения" });
-            dgvAdmission.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "EduForm", HeaderText = "Форма обучения" });
-            dgvAdmission.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "MathScore", HeaderText = "Математика" });
-            dgvAdmission.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "RusScore", HeaderText = "Русский" });
-            dgvAdmission.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "ITScore", HeaderText = "Информатика" });
-
-            // Добавляем вычисляемый столбец (без DataPropertyName)
             dgvAdmission.Columns.Add(new DataGridViewTextBoxColumn
             {
-                HeaderText = "Сумма",
-                Name = "colTotalScore"
+                DataPropertyName = "FullName", HeaderText = "ФИО"
+            });
+
+            dgvAdmission.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                DataPropertyName = "Gender", HeaderText = "Пол"
+            });
+
+            dgvAdmission.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                DataPropertyName = nameof(Applicant.BirthDate),
+                HeaderText = "Дата рождения",
+                DefaultCellStyle = { Format = "dd.MM.yyyy" }
+            });
+
+            dgvAdmission.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                DataPropertyName = "EduForm", HeaderText = "Форма обучения"
+            });
+
+            dgvAdmission.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                DataPropertyName = "MathScore", HeaderText = "Математика"
+            });
+
+            dgvAdmission.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                DataPropertyName = "RusScore", HeaderText = "Русский"
+            });
+
+            dgvAdmission.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                DataPropertyName = "ITScore", HeaderText = "Информатика"
+            });
+
+            dgvAdmission.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "TotalScore", HeaderText = "Сумма баллов"
             });
 
             dgvAdmission.CellFormatting += dgvAdmission_CellFormatting;
+        }
+
+        private void LoadData()
+        {
+            var list = service.GetAll();
+
+            applicants = new BindingList<Applicant>(list.ToList());
             dgvAdmission.DataSource = applicants;
         }
 
         // Считаем сумму прямо при отображении строки
         private void dgvAdmission_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            if (dgvAdmission.Columns[e.ColumnIndex].Name == "colTotalScore")
+            if (dgvAdmission.Columns[e.ColumnIndex].Name == "TotalScore")
             {
-                var applicant = dgvAdmission.Rows[e.RowIndex].DataBoundItem as Applicant;
-                if (applicant != null)
+                if (dgvAdmission.Rows[e.RowIndex].DataBoundItem is Applicant a)
                 {
-                    e.Value = applicant.MathScore + applicant.RusScore + applicant.ITScore;
+                    e.Value = a.MathScore + a.RusScore + a.ITScore;
                 }
             }
         }
 
-        private void LoadData()
-        {
-            if (File.Exists(dataFile))
-            {
-                var json = File.ReadAllText(dataFile);
-                var list = JsonSerializer.Deserialize<BindingList<Applicant>>(json);
-                applicants = list ?? new BindingList<Applicant>();
-            }
-            else
-            {
-                // если файла нет — создаём пустой список
-                applicants = new BindingList<Applicant>();
-            }
-
-            dgvAdmission.DataSource = applicants;
-        }
-
-        private void SaveData()
-        {
-            var json = JsonSerializer.Serialize(applicants, new JsonSerializerOptions { WriteIndented = true });
-            File.WriteAllText(dataFile, json);
-        }
-
-        private void AfterDataChenged()
-        {
-            SaveData();
-            UpdateStats();
-        }
-
-        private void Addbtn_Click(object sender, EventArgs e)
-        {
-            var form = new EditForm();
-            if (form.ShowDialog() == DialogResult.OK)
-            {
-                applicants.Add(form.ApplicantData);
-                AfterDataChenged();
-            }
-        }
 
         private void Editbtn_Click(object sender, EventArgs e)
         {
-            if (dgvAdmission.CurrentRow == null) return;
-            var selected = (Applicant)dgvAdmission.CurrentRow.DataBoundItem;
+            if (dgvAdmission.CurrentRow?.DataBoundItem is not Applicant selected)
+                return;
 
-            var form = new EditForm(selected);
+            using var form = new EditForm(selected);
+
             if (form.ShowDialog() == DialogResult.OK)
             {
-                var index = applicants.IndexOf(selected);
-                applicants[index] = form.ApplicantData;
-                dgvAdmission.Refresh();
-                AfterDataChenged();
+                LoadData();
+                UpdateStats();
             }
         }
 
         private void DeleteBtn_Click(object sender, EventArgs e)
         {
-            if (dgvAdmission.CurrentRow == null) return;
-            var selected = (Applicant)dgvAdmission.CurrentRow.DataBoundItem;
+            if (dgvAdmission.CurrentRow?.DataBoundItem is not Applicant selected)
+                return;
 
-            if (MessageBox.Show($"Удалить {selected.FullName}?", "Подтверждение",
-                MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-            {
-                applicants.Remove(selected);
-                AfterDataChenged();
-            }
+            var confirm = MessageBox.Show(
+                "Удалить выбранного абитуриента?",
+                "Подтверждение",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question);
+
+            if (confirm != DialogResult.Yes)
+                return;
+
+            service.Remove(selected.Id);
+            LoadData();
+            UpdateStats();
         }
 
         private void UpdateStats()
         {
-            lblTotal.Text = $"Всего абитуриентов: {applicants.Count}";
-            lblPassed.Text = $"Прошли (сумма >150): {applicants.Count(a => a.MathScore + a.RusScore + a.ITScore > 150)}";
+            lblTotal.Text = $"Всего абитуриентов: {service.CountAll()}";
+            lblPassed.Text = $"Прошли (сумма > 150): {service.CountPassed(150)}";
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            SaveData();
             base.OnFormClosing(e);
+        }
+
+        private void Addbtn_Click_1(object sender, EventArgs e)
+        {
+            using var form = new EditForm();
+
+            if (form.ShowDialog() == DialogResult.OK)
+            {
+                service.Add(form.ApplicantData);
+                LoadData();
+                UpdateStats();
+            }
         }
     }
 }
