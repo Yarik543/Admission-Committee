@@ -1,50 +1,35 @@
-﻿using AdmissionCommittee.Abstractions;
+﻿using AdmissionCommittee.Abstractions.Repositories;
 using AdmissionCommittee.Abstractions.Services;
 using AdmissionCommittee.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
-namespace AdmissionCommittee.Services.Services
+namespace AdmissionCommittee.Services
 {
     public class ApplicantService : IApplicantService
     {
-        private readonly IApplicantRepository repository;
+        private readonly IApplicantRepository _repository;
 
         public ApplicantService(IApplicantRepository repository)
         {
-            this.repository = repository;
+            _repository = repository;
         }
 
         public IReadOnlyList<Applicant> GetAll()
-            => repository.GetAll();
+            => _repository.GetAll();
 
         public void Add(Applicant applicant)
-        {
-            if (applicant == null)
-                throw new ArgumentNullException(nameof(applicant));
-
-            repository.Add(applicant);
-        }
+            => _repository.Add(applicant);
 
         public void Update(Applicant applicant)
-        {
-            if (applicant == null)
-                throw new ArgumentNullException(nameof(applicant));
-
-            repository.Update(applicant);
-        }
+            => _repository.Update(applicant);
 
         public void Remove(Guid id)
-            => repository.Remove(id);
+            => _repository.Remove(id);
 
         public int CountAll()
-            => repository.GetAll().Count;
+            => _repository.GetAll().Count;
 
         public int CountPassed(int minTotalScore)
-            => repository
-                .GetAll()
-                .Count(a =>
-                    a.MathScore + a.RusScore + a.ITScore >= minTotalScore);
+            => _repository.GetAll()
+                .Count(a => a.MathScore + a.RusScore + a.ITScore > minTotalScore);
     }
 }

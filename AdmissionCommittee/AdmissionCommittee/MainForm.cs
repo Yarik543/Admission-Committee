@@ -1,22 +1,26 @@
 ﻿using AdmissionCommittee.Abstractions.Services;
+using AdmissionCommittee.Data.Memory.Repositories;
 using AdmissionCommittee.Domain.Entities;
+using AdmissionCommittee.Services;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
-using AdmissionCommittee.Application.Services;
 
 namespace AdmissionCommittee
 {
     public partial class MainForm : Form
     {
         private BindingList<Applicant> applicants = new();
-
-        private readonly IApplicantService service;
+        private readonly IApplicantService service; // Сервис для работы с абитуриентами
 
         public MainForm()
         {
             InitializeComponent();
-            service = ServiceFactory.CreateApplicantService();
+
+            // Создаём репозиторий из NuGet-пакета
+            var repository = new InMemoryApplicantRepository(); // класс из NuGet
+            service = new ApplicantService(repository);
+
             InitGrid();
             LoadData();
             UpdateStats();
@@ -134,11 +138,8 @@ namespace AdmissionCommittee
 
         private void UpdateStats()
         {
-            var all = service.GetAll();
-
-            lblTotal.Text = $"Всего абитуриентов: {all.Count}";
-            lblPassed.Text = $"Прошли (сумма > 150): {all.Count(a =>
-                a.MathScore + a.RusScore + a.ITScore > 150)}";
+            lblTotal.Text = $"Всего абитуриентов: {service.CountAll()}";
+            lblPassed.Text = $"Прошли (сумма > 150): {service.CountPassed(150)}";
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
