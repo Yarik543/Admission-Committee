@@ -3,6 +3,7 @@ using AdmissionCommittee.Data.Memory.Repositories;
 using AdmissionCommittee.Domain.Entities;
 using AdmissionCommittee.Services;
 using System.ComponentModel;
+using AdmissionCommittee.Data.EF;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -18,7 +19,7 @@ namespace AdmissionCommittee
             InitializeComponent();
 
             // Создаём репозиторий из NuGet-пакета
-            var repository = new InMemoryApplicantRepository(); // класс из NuGet
+            var repository = new ApplicantEfRepository(); // класс из BD
             service = new ApplicantService(repository);
 
             InitGrid();
