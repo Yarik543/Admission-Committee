@@ -1,5 +1,4 @@
 ﻿using AdmissionCommittee.Abstractions.Services;
-using AdmissionCommittee.Data.Memory.Repositories;
 using AdmissionCommittee.Domain.Entities;
 using AdmissionCommittee.Services;
 using System.ComponentModel;
@@ -113,6 +112,7 @@ namespace AdmissionCommittee
 
             if (form.ShowDialog() == DialogResult.OK)
             {
+                service.Update(form.ApplicantData);
                 LoadData();
                 UpdateStats();
             }

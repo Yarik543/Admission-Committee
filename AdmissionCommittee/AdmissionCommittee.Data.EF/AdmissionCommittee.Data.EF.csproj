@@ -18,7 +18,6 @@
 	<ItemGroup>
 		<ProjectReference Include="..\AdmissionCommittee.Domain\AdmissionCommittee.Domain.csproj" />
 		<ProjectReference Include="..\AdmissionCommittee.Abstractions\AdmissionCommittee.Abstractions.csproj" />
-		<ProjectReference Include="AdmissionCommittee.Data.EF.csproj" />
 	</ItemGroup>
 
 </Project>

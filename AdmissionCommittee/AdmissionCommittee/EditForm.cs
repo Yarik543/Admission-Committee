@@ -66,6 +66,5 @@ namespace AdmissionCommittee
             dateBDate.Format = DateTimePickerFormat.Short;
             ApplicantData.BirthDate = dateBDate.Value;
         }
-
-}
+    }
 }

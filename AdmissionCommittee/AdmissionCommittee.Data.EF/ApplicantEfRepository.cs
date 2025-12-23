@@ -26,6 +26,12 @@ namespace AdmissionCommittee.Data.EF
 
         public void Update(Applicant applicant)
         {
+            var tracked = _context.ChangeTracker
+       .Entries<Applicant>()
+       .FirstOrDefault(e => e.Entity.Id == applicant.Id);
+
+            if (tracked != null)
+                tracked.State = EntityState.Detached;
             _context.Applicants.Update(applicant);
             _context.SaveChanges();
         }
