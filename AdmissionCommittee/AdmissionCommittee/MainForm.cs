@@ -2,6 +2,8 @@
 using AdmissionCommittee.Data.Memory.Repositories;
 using AdmissionCommittee.Domain.Entities;
 using AdmissionCommittee.Services;
+using Microsoft.Extensions.Logging;
+using Serilog;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
@@ -19,7 +21,15 @@ namespace AdmissionCommittee
 
             // Создаём репозиторий из NuGet-пакета
             var repository = new InMemoryApplicantRepository(); // класс из NuGet
-            service = new ApplicantService(repository);
+
+            var loggerFactory = LoggerFactory.Create(builder =>
+            {
+                builder.AddSerilog();
+            });
+
+            var logger = loggerFactory.CreateLogger<ApplicantService>();
+
+            service = new ApplicantService(repository, logger);
 
             InitGrid();
             LoadData();

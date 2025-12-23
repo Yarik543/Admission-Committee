@@ -2,7 +2,6 @@
 using System;
 using System.Windows.Forms;
 
-
 namespace AdmissionCommittee
 {
     internal static class Program
