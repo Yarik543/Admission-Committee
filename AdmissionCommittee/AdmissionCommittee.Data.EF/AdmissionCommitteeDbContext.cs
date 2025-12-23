@@ -1,17 +1,15 @@
-﻿using AdmissionCommittee.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using AdmissionCommittee.Data.EF;
+﻿using Microsoft.EntityFrameworkCore;
+using AdmissionCommittee.Domain.Entities;
 
-namespace AdmissionCommittee.Data.EF
+namespace AdmissionCommittee.Data.EF;
+
+public class AdmissionCommitteeDbContext : DbContext
 {
-    public class AdmissionCommitteeDbContext : DbContext
-    {
-        public DbSet<Applicant> Applicants { get; set; }
+    public DbSet<Applicant> Applicants { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder options)
-        {
-            options.UseSqlite("Data Source=admission.db");
-        }
+    protected override void OnConfiguring(DbContextOptionsBuilder options)
+    {
+        options.UseSqlServer(
+            "Server=(localdb)\\MSSQLLocalDB;Database=AdmissionCommitteeDb;Trusted_Connection=True;");
     }
 }
