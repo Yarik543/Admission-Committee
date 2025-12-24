@@ -1,109 +1,42 @@
 ﻿using AdmissionCommittee.Abstractions.Repositories;
 using AdmissionCommittee.Abstractions.Services;
 using AdmissionCommittee.Domain.Entities;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace AdmissionCommittee.Services
 {
     public class ApplicantService : IApplicantService
     {
-        private readonly IApplicantRepository _repository;
-        private readonly ILogger<ApplicantService> _logger;
+        private readonly IApplicantRepository repository;
 
-        public ApplicantService(
-            IApplicantRepository repository,
-            ILogger<ApplicantService> logger)
+        public ApplicantService(IApplicantRepository repository)
         {
-            _repository = repository;
-            _logger = logger;
+            this.repository = repository;
         }
 
-        public IReadOnlyList<Applicant> GetAll()
-        {
-            var stopwatch = Stopwatch.StartNew();
+        public Task<IReadOnlyList<Applicant>> GetAllAsync()
+            => repository.GetAllAsync();
 
-            var result = _repository.GetAll();
+        public Task AddAsync(Applicant applicant)
+            => repository.AddAsync(applicant);
 
-            stopwatch.Stop();
-            _logger.LogInformation(
-                "Method {Method} executed in {Elapsed} ms",
-                nameof(GetAll),
-                stopwatch.ElapsedMilliseconds);
+        public Task UpdateAsync(Applicant applicant)
+            => repository.UpdateAsync(applicant);
 
-            return result;
-        }
+        public Task RemoveAsync(Guid id)
+            => repository.RemoveAsync(id);
 
-        public void Add(Applicant applicant)
-        {
-            var stopwatch = Stopwatch.StartNew();
+        // синхронную статистику можно оставить
+        public int CountAll(IEnumerable<Applicant> list)
+            => list.Count();
 
-            _repository.Add(applicant);
+        public int CountPassed(IEnumerable<Applicant> list, int minScore)
+            => list.Count(a => a.MathScore + a.RusScore + a.ITScore >= minScore);
 
-            stopwatch.Stop();
-            _logger.LogInformation(
-                "Method {Method} executed in {Elapsed} ms",
-                nameof(Add),
-                stopwatch.ElapsedMilliseconds);
-        }
+        public int CountAll(IReadOnlyList<Applicant> applicants)
+      => applicants.Count;
 
-        public void Update(Applicant applicant)
-        {
-            var stopwatch = Stopwatch.StartNew();
-
-            _repository.Update(applicant);
-
-            stopwatch.Stop();
-            _logger.LogInformation(
-                "Method {Method} executed in {Elapsed} ms",
-                nameof(Update),
-                stopwatch.ElapsedMilliseconds);
-        }
-
-        public void Remove(Guid id)
-        {
-            var stopwatch = Stopwatch.StartNew();
-
-            _repository.Remove(id);
-
-            stopwatch.Stop();
-            _logger.LogInformation(
-                "Method {Method} executed in {Elapsed} ms",
-                nameof(Remove),
-                stopwatch.ElapsedMilliseconds);
-        }
-
-        public int CountAll()
-        {
-            var stopwatch = Stopwatch.StartNew();
-
-            var count = _repository.GetAll().Count;
-
-            stopwatch.Stop();
-            _logger.LogInformation(
-                "Method {Method} executed in {Elapsed} ms",
-                nameof(CountAll),
-                stopwatch.ElapsedMilliseconds);
-
-            return count;
-        }
-
-        public int CountPassed(int minTotalScore)
-        {
-            var stopwatch = Stopwatch.StartNew();
-
-            var count = _repository.GetAll()
-                .Count(a => a.MathScore + a.RusScore + a.ITScore > minTotalScore);
-
-            stopwatch.Stop();
-            _logger.LogInformation(
-                "Method {Method} executed in {Elapsed} ms",
-                nameof(CountPassed),
-                stopwatch.ElapsedMilliseconds);
-
-            return count;
-        }
+        public int CountPassed(IReadOnlyList<Applicant> applicants, int minScore)
+            => applicants.Count(a =>
+                a.MathScore + a.RusScore + a.ITScore >= minScore);
     }
 }

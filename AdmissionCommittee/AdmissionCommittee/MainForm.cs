@@ -1,10 +1,8 @@
 ﻿using AdmissionCommittee.Abstractions.Services;
-using AdmissionCommittee.Data.Memory.Repositories;
 using AdmissionCommittee.Domain.Entities;
 using AdmissionCommittee.Services;
-using Microsoft.Extensions.Logging;
-using Serilog;
 using System.ComponentModel;
+using AdmissionCommittee.Data.EF;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -19,21 +17,11 @@ namespace AdmissionCommittee
         {
             InitializeComponent();
 
-            // Создаём репозиторий из NuGet-пакета
-            var repository = new InMemoryApplicantRepository(); // класс из NuGet
-
-            var loggerFactory = LoggerFactory.Create(builder =>
-            {
-                builder.AddSerilog();
-            });
-
-            var logger = loggerFactory.CreateLogger<ApplicantService>();
-
-            service = new ApplicantService(repository, logger);
+            var repository = new ApplicantEfRepository();
+            service = new ApplicantService(repository);
 
             InitGrid();
-            LoadData();
-            UpdateStats();
+            _ = LoadDataAsync();
         }
 
 
@@ -92,12 +80,12 @@ namespace AdmissionCommittee
             dgvAdmission.CellFormatting += dgvAdmission_CellFormatting;
         }
 
-        private void LoadData()
+        private async Task LoadDataAsync()
         {
-            var list = service.GetAll();
-
+            var list = await service.GetAllAsync();
             applicants = new BindingList<Applicant>(list.ToList());
             dgvAdmission.DataSource = applicants;
+            UpdateStats(list);
         }
 
         // Считаем сумму прямо при отображении строки
@@ -113,7 +101,7 @@ namespace AdmissionCommittee
         }
 
 
-        private void Editbtn_Click(object sender, EventArgs e)
+        private async void Editbtn_Click(object sender, EventArgs e)
         {
             if (dgvAdmission.CurrentRow?.DataBoundItem is not Applicant selected)
                 return;
@@ -122,12 +110,12 @@ namespace AdmissionCommittee
 
             if (form.ShowDialog() == DialogResult.OK)
             {
-                LoadData();
-                UpdateStats();
+                await service.UpdateAsync(form.ApplicantData);
+                await LoadDataAsync();
             }
         }
 
-        private void DeleteBtn_Click(object sender, EventArgs e)
+        private async void DeleteBtn_Click(object sender, EventArgs e)
         {
             if (dgvAdmission.CurrentRow?.DataBoundItem is not Applicant selected)
                 return;
@@ -141,15 +129,15 @@ namespace AdmissionCommittee
             if (confirm != DialogResult.Yes)
                 return;
 
-            service.Remove(selected.Id);
-            LoadData();
-            UpdateStats();
+            await service.RemoveAsync(selected.Id);
+            await LoadDataAsync();
         }
 
-        private void UpdateStats()
+        private void UpdateStats(IReadOnlyList<Applicant> list)
         {
-            lblTotal.Text = $"Всего абитуриентов: {service.CountAll()}";
-            lblPassed.Text = $"Прошли (сумма > 150): {service.CountPassed(150)}";
+            lblTotal.Text = $"Всего абитуриентов: {service.CountAll(list)}";
+            lblPassed.Text =
+                $"Прошли (сумма > 150): {service.CountPassed(list, 150)}";
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
@@ -157,15 +145,14 @@ namespace AdmissionCommittee
             base.OnFormClosing(e);
         }
 
-        private void Addbtn_Click_1(object sender, EventArgs e)
+        private async void Addbtn_Click_1(object sender, EventArgs e)
         {
             using var form = new EditForm();
 
             if (form.ShowDialog() == DialogResult.OK)
             {
-                service.Add(form.ApplicantData);
-                LoadData();
-                UpdateStats();
+                await service.AddAsync(form.ApplicantData);
+                await LoadDataAsync();
             }
         }
     }

@@ -4,11 +4,12 @@ namespace AdmissionCommittee.Abstractions.Services
 {
     public interface IApplicantService
     {
-        IReadOnlyList<Applicant> GetAll();
-        void Add(Applicant applicant);
-        void Update(Applicant applicant);
-        void Remove(Guid id);
-        int CountAll();
-        int CountPassed(int minTotalScore);
+        Task<IReadOnlyList<Applicant>> GetAllAsync();
+        Task AddAsync(Applicant applicant);
+        Task UpdateAsync(Applicant applicant);
+        Task RemoveAsync(Guid id);
+
+        int CountAll(IReadOnlyList<Applicant> applicants);
+        int CountPassed(IReadOnlyList<Applicant> applicants, int minScore);
     }
 }

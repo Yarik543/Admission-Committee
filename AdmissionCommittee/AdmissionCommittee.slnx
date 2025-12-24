@@ -1,8 +1,7 @@
 <Solution>
   <Project Path="AdmissionCommittee.Abstractions/AdmissionCommittee.Abstractions.csproj" />
-  <Project Path="AdmissionCommittee.Data.Memory/AdmissionCommittee.Data.Memory.csproj" />
+  <Project Path="AdmissionCommittee.Data.EF/AdmissionCommittee.Data.EF.csproj" />
   <Project Path="AdmissionCommittee.Domain/AdmissionCommittee.Domain.csproj" />
   <Project Path="AdmissionCommittee.Services/AdmissionCommittee.Services.csproj" />
-  <Project Path="AdmissionCommittee.Tests/AdmissionCommittee.Tests.csproj" />
   <Project Path="AdmissionCommittee/AdmissionCommittee.csproj" />
 </Solution>
