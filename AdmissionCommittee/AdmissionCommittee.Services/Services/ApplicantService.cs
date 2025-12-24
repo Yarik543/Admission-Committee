@@ -1,6 +1,10 @@
 ﻿using AdmissionCommittee.Abstractions.Repositories;
 using AdmissionCommittee.Abstractions.Services;
 using AdmissionCommittee.Domain.Entities;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace AdmissionCommittee.Services
 {
@@ -8,7 +12,9 @@ namespace AdmissionCommittee.Services
     {
         private readonly IApplicantRepository repository;
 
-        public ApplicantService(IApplicantRepository repository)
+        public ApplicantService(
+            IApplicantRepository repository,
+            ILogger<ApplicantService> logger)
         {
             this.repository = repository;
         }

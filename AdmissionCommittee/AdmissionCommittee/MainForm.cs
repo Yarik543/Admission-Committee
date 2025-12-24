@@ -1,6 +1,8 @@
 ﻿using AdmissionCommittee.Abstractions.Services;
 using AdmissionCommittee.Domain.Entities;
 using AdmissionCommittee.Services;
+using Microsoft.Extensions.Logging;
+using Serilog;
 using System.ComponentModel;
 using AdmissionCommittee.Data.EF;
 using System.Linq;
@@ -19,6 +21,16 @@ namespace AdmissionCommittee
 
             var repository = new ApplicantEfRepository();
             service = new ApplicantService(repository);
+            var repository = new InMemoryApplicantRepository(); // класс из NuGet
+
+            var loggerFactory = LoggerFactory.Create(builder =>
+            {
+                builder.AddSerilog();
+            });
+
+            var logger = loggerFactory.CreateLogger<ApplicantService>();
+
+            service = new ApplicantService(repository, logger);
 
             InitGrid();
             _ = LoadDataAsync();
