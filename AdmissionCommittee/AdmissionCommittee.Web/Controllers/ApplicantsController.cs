@@ -87,7 +87,6 @@ namespace AdmissionCommittee.Controllers
 
         // POST: Applicants/Delete/5
         [HttpPost]
-        [ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
