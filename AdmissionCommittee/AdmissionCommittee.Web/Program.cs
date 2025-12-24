@@ -31,6 +31,6 @@ app.UseAuthorization();
 // Маршрутизация по умолчанию
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Applicants}/{action=Index}/{id?}");
 
 app.Run();

@@ -6,7 +6,7 @@
 
 <div class="container mt-4">
     <h2>@ViewData["Title"]</h2>
-    <h4>Вы уверены, что хотите удалить этого абитуриента?</h4>
+    <h3>Вы уверены, что хотите удалить абитуриента?</h3>
 
     <div>
         <dl class="row">
@@ -23,8 +23,10 @@
             <dd class="col-sm-10">@Model.EduForm</dd>
         </dl>
 
-        <form asp-action="DeleteConfirmed" method="post">
+        <form asp-action="Delete" method="post">
             <input type="hidden" asp-for="Id" />
+            @Html.AntiForgeryToken()
+
             <button type="submit" class="btn btn-danger">Удалить</button>
             <a asp-action="Index" class="btn btn-secondary">Отмена</a>
         </form>

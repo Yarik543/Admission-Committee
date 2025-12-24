@@ -80,14 +80,14 @@ namespace AdmissionCommittee.Controllers
         {
             var applicant = await _service.GetByIdAsync(id);
             if (applicant == null)
-            {
                 return NotFound();
-            }
+
             return View(applicant);
         }
 
         // POST: Applicants/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
+        [ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
