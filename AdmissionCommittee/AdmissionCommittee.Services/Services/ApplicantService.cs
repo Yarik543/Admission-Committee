@@ -1,10 +1,6 @@
 ﻿using AdmissionCommittee.Abstractions.Repositories;
 using AdmissionCommittee.Abstractions.Services;
 using AdmissionCommittee.Domain.Entities;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace AdmissionCommittee.Services
 {
@@ -12,9 +8,7 @@ namespace AdmissionCommittee.Services
     {
         private readonly IApplicantRepository repository;
 
-        public ApplicantService(
-            IApplicantRepository repository,
-            ILogger<ApplicantService> logger)
+        public ApplicantService(IApplicantRepository repository)
         {
             this.repository = repository;
         }
@@ -32,8 +26,14 @@ namespace AdmissionCommittee.Services
             => repository.RemoveAsync(id);
 
         // синхронную статистику можно оставить
+        public int CountAll(IEnumerable<Applicant> list)
+            => list.Count();
+
+        public int CountPassed(IEnumerable<Applicant> list, int minScore)
+            => list.Count(a => a.MathScore + a.RusScore + a.ITScore >= minScore);
+
         public int CountAll(IReadOnlyList<Applicant> applicants)
-    => applicants.Count;
+      => applicants.Count;
 
         public int CountPassed(IReadOnlyList<Applicant> applicants, int minScore)
             => applicants.Count(a =>
