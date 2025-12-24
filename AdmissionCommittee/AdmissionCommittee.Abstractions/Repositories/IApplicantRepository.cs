@@ -6,9 +6,9 @@ namespace AdmissionCommittee.Abstractions.Repositories
 {
     public interface IApplicantRepository
     {
-        IReadOnlyList<Applicant> GetAll();
-        void Add(Applicant applicant);
-        void Update(Applicant applicant);
-        void Remove(Guid id);
+        Task AddAsync(Applicant applicant);
+        Task UpdateAsync(Applicant applicant);
+        Task RemoveAsync(Guid id);
+        Task<IReadOnlyList<Applicant>> GetAllAsync();
     }
 }

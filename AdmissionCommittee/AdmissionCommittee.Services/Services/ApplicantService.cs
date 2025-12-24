@@ -6,30 +6,31 @@ namespace AdmissionCommittee.Services
 {
     public class ApplicantService : IApplicantService
     {
-        private readonly IApplicantRepository _repository;
+        private readonly IApplicantRepository repository;
 
         public ApplicantService(IApplicantRepository repository)
         {
-            _repository = repository;
+            this.repository = repository;
         }
 
-        public IReadOnlyList<Applicant> GetAll()
-            => _repository.GetAll();
+        public Task<IReadOnlyList<Applicant>> GetAllAsync()
+            => repository.GetAllAsync();
 
-        public void Add(Applicant applicant)
-            => _repository.Add(applicant);
+        public Task AddAsync(Applicant applicant)
+            => repository.AddAsync(applicant);
 
-        public void Update(Applicant applicant)
-            => _repository.Update(applicant);
+        public Task UpdateAsync(Applicant applicant)
+            => repository.UpdateAsync(applicant);
 
-        public void Remove(Guid id)
-            => _repository.Remove(id);
+        public Task RemoveAsync(Guid id)
+            => repository.RemoveAsync(id);
 
-        public int CountAll()
-            => _repository.GetAll().Count;
+        // синхронную статистику можно оставить
+        public int CountAll(IReadOnlyList<Applicant> applicants)
+    => applicants.Count;
 
-        public int CountPassed(int minTotalScore)
-            => _repository.GetAll()
-                .Count(a => a.MathScore + a.RusScore + a.ITScore > minTotalScore);
+        public int CountPassed(IReadOnlyList<Applicant> applicants, int minScore)
+            => applicants.Count(a =>
+                a.MathScore + a.RusScore + a.ITScore >= minScore);
     }
 }

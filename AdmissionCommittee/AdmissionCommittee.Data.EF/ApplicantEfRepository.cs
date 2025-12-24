@@ -1,48 +1,44 @@
 ﻿using AdmissionCommittee.Abstractions.Repositories;
 using AdmissionCommittee.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using AdmissionCommittee.Data.EF;
 
 namespace AdmissionCommittee.Data.EF
 {
     public class ApplicantEfRepository : IApplicantRepository
     {
-        private readonly AdmissionCommitteeDbContext _context;
-
-        public ApplicantEfRepository()
+        public async Task<IReadOnlyList<Applicant>> GetAllAsync()
         {
-            _context = new AdmissionCommitteeDbContext();
-            _context.Database.EnsureCreated();
+            using var context = new AdmissionCommitteeDbContext();
+            return await context.Applicants
+                .AsNoTracking()
+                .ToListAsync();
         }
 
-        public IReadOnlyList<Applicant> GetAll()
-            => _context.Applicants.AsNoTracking().ToList();
-
-        public void Add(Applicant applicant)
+        public async Task AddAsync(Applicant applicant)
         {
-            _context.Applicants.Add(applicant);
-            _context.SaveChanges();
+            using var context = new AdmissionCommitteeDbContext();
+            await context.Applicants.AddAsync(applicant);
+            await context.SaveChangesAsync();
         }
 
-        public void Update(Applicant applicant)
+        public async Task UpdateAsync(Applicant applicant)
         {
-            var tracked = _context.ChangeTracker
-       .Entries<Applicant>()
-       .FirstOrDefault(e => e.Entity.Id == applicant.Id);
-
-            if (tracked != null)
-                tracked.State = EntityState.Detached;
-            _context.Applicants.Update(applicant);
-            _context.SaveChanges();
+            using var context = new AdmissionCommitteeDbContext();
+            context.Applicants.Update(applicant);
+            await context.SaveChangesAsync();
         }
 
-        public void Remove(Guid id)
+        public async Task RemoveAsync(Guid id)
         {
-            var applicant = _context.Applicants.FirstOrDefault(a => a.Id == id);
+            using var context = new AdmissionCommitteeDbContext();
+
+            var applicant = await context.Applicants
+                .FirstOrDefaultAsync(a => a.Id == id);
+
             if (applicant != null)
             {
-                _context.Applicants.Remove(applicant);
-                _context.SaveChanges();
+                context.Applicants.Remove(applicant);
+                await context.SaveChangesAsync();
             }
         }
     }
