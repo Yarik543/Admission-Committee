@@ -1,65 +1,98 @@
-﻿using AdmissionCommittee.Abstractions.Services;
+﻿using Microsoft.AspNetCore.Mvc;
+using AdmissionCommittee.Abstractions.Services;
 using AdmissionCommittee.Domain.Entities;
-using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
-namespace AdmissionCommittee.Web.Controllers;
-
-public class ApplicantsController : Controller
+namespace AdmissionCommittee.Controllers
 {
-    private readonly IApplicantService _service;
-
-    public ApplicantsController(IApplicantService service)
+    public class ApplicantsController : Controller
     {
-        _service = service;
-    }
+        private readonly IApplicantService _service;
 
-    public async Task<IActionResult> Index()
-    {
-        var list = await _service.GetAllAsync();
-        return View(list);
-    }
+        public ApplicantsController(IApplicantService service)
+        {
+            _service = service;
+        }
 
-    public IActionResult Create()
-    {
-        return View(new Applicant());
-    }
+        // GET: Applicants
+        public async Task<IActionResult> Index()
+        {
+            var list = await _service.GetAllAsync();
 
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(Applicant applicant)
-    {
-        if (!ModelState.IsValid)
+            ViewBag.Total = list.Count;
+            ViewBag.Passed = list.Count(a => (a.MathScore + a.RusScore + a.ITScore) > 150);
+
+            return View(list);
+        }
+
+        // GET: Applicants/Create
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        // POST: Applicants/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Applicant applicant)
+        {
+            if (ModelState.IsValid)
+            {
+                await _service.AddAsync(applicant);
+                return RedirectToAction(nameof(Index));
+            }
+
             return View(applicant);
+        }
 
-        await _service.AddAsync(applicant);
-        return RedirectToAction(nameof(Index));
-    }
-
-    public async Task<IActionResult> Edit(Guid id)
-    {
-        var applicant = (await _service.GetAllAsync())
-            .FirstOrDefault(a => a.Id == id);
-
-        if (applicant == null)
-            return NotFound();
-
-        return View(applicant);
-    }
-
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(Applicant applicant)
-    {
-        if (!ModelState.IsValid)
+        // GET: Applicants/Edit/5
+        public async Task<IActionResult> Edit(Guid id)
+        {
+            var applicant = await _service.GetByIdAsync(id);
+            if (applicant == null)
+            {
+                return NotFound();
+            }
             return View(applicant);
+        }
 
-        await _service.UpdateAsync(applicant);
-        return RedirectToAction(nameof(Index));
-    }
+        // POST: Applicants/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(Guid id, Applicant applicant)
+        {
+            if (id != applicant.Id)
+            {
+                return BadRequest();
+            }
 
-    public async Task<IActionResult> Delete(Guid id)
-    {
-        await _service.RemoveAsync(id);
-        return RedirectToAction(nameof(Index));
+            if (ModelState.IsValid)
+            {
+                await _service.UpdateAsync(applicant);
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(applicant);
+        }
+
+        // GET: Applicants/Delete/5
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var applicant = await _service.GetByIdAsync(id);
+            if (applicant == null)
+            {
+                return NotFound();
+            }
+            return View(applicant);
+        }
+
+        // POST: Applicants/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
+        {
+            await _service.RemoveAsync(id);
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

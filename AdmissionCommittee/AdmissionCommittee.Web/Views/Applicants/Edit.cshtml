@@ -1,0 +1,72 @@
+﻿@model AdmissionCommittee.Domain.Entities.Applicant
+
+@{
+    ViewData["Title"] = "Редактировать абитуриента";
+}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<div class="container mt-4">
+    <h2>@ViewData["Title"]</h2>
+
+    <form asp-action="Edit" method="post" class="needs-validation" novalidate>
+        <input type="hidden" asp-for="Id" />
+
+        <div class="mb-3">
+            <label asp-for="FullName" class="form-label"></label>
+            <input asp-for="FullName" class="form-control" required />
+            <span asp-validation-for="FullName" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Gender" class="form-label"></label>
+            <select asp-for="Gender" class="form-select" required>
+                <option value="">-- Выберите пол --</option>
+                <option>Мужской</option>
+                <option>Женский</option>
+            </select>
+            <span asp-validation-for="Gender" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="BirthDate" class="form-label"></label>
+            <input asp-for="BirthDate" type="date" class="form-control" required />
+            <span asp-validation-for="BirthDate" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="EduForm" class="form-label"></label>
+            <select asp-for="EduForm" class="form-select" required>
+                <option value="">-- Выберите форму обучения --</option>
+                <option>Очная</option>
+                <option>Заочная</option>
+            </select>
+            <span asp-validation-for="EduForm" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="MathScore" class="form-label"></label>
+            <input asp-for="MathScore" type="number" min="0" max="100" class="form-control" required />
+            <span asp-validation-for="MathScore" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="RusScore" class="form-label"></label>
+            <input asp-for="RusScore" type="number" min="0" max="100" class="form-control" required />
+            <span asp-validation-for="RusScore" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="ITScore" class="form-label"></label>
+            <input asp-for="ITScore" type="number" min="0" max="100" class="form-control" required />
+            <span asp-validation-for="ITScore" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-success">Сохранить</button>
+        <a asp-action="Index" class="btn btn-secondary">Отмена</a>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

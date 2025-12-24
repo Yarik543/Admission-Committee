@@ -8,34 +8,28 @@ namespace AdmissionCommittee.Domain.Entities
     /// </summary>
     public class Applicant
     {
+        public Guid Id { get; set; }
 
-        public Guid Id { get; set; } = Guid.NewGuid();
+        [Required]
+        [StringLength(100)]
+        public string FullName { get; set; }
 
-        [Required(ErrorMessage = "Поле «{0}» обязательно.")]
-        [Display(Name = "ФИО")]
-        public string FullName { get; set; } = string.Empty;
+        [Required]
+        public string Gender { get; set; }
 
-        [Required(ErrorMessage = "Поле «{0}» обязательно.")]
-        [Display(Name = "Пол")]
-        public string Gender { get; set; } = string.Empty;
+        [Required]
+        public DateTime BirthDate { get; set; }
 
-        [Display(Name = "Дата рождения")]
-        public DateTime? BirthDate { get; set; }
+        [Required]
+        public string EduForm { get; set; }
 
-        [Required(ErrorMessage = "Поле «{0}» обязательно.")]
-        [Display(Name = "Форма обучения")]
-        public string EduForm { get; set; } = string.Empty;
-
-        [Range(1, 100, ErrorMessage = "{0} должен быть от {1} до {2}.")]
-        [Display(Name = "Математика")]
+        [Range(0, 100)]
         public int MathScore { get; set; }
 
-        [Range(1, 100, ErrorMessage = "{0} должен быть от {1} до {2}.")]
-        [Display(Name = "Русский язык")]
+        [Range(0, 100)]
         public int RusScore { get; set; }
 
-        [Range(1, 100, ErrorMessage = "{0} должен быть от {1} до {2}.")]
-        [Display(Name = "Информатика")]
+        [Range(0, 100)]
         public int ITScore { get; set; }
     }
 }
