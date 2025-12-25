@@ -6,39 +6,42 @@ namespace AdmissionCommittee.Data.EF
 {
     public class ApplicantEfRepository : IApplicantRepository
     {
+        private readonly AdmissionCommitteeDbContext _context;
+
+        // DbContext приходит из DI
+        public ApplicantEfRepository(AdmissionCommitteeDbContext context)
+        {
+            _context = context;
+        }
+
         public async Task<IReadOnlyList<Applicant>> GetAllAsync()
         {
-            using var context = new AdmissionCommitteeDbContext();
-            return await context.Applicants
+            return await _context.Applicants
                 .AsNoTracking()
                 .ToListAsync();
         }
 
         public async Task AddAsync(Applicant applicant)
         {
-            using var context = new AdmissionCommitteeDbContext();
-            await context.Applicants.AddAsync(applicant);
-            await context.SaveChangesAsync();
+            await _context.Applicants.AddAsync(applicant);
+            await _context.SaveChangesAsync();
         }
 
         public async Task UpdateAsync(Applicant applicant)
         {
-            using var context = new AdmissionCommitteeDbContext();
-            context.Applicants.Update(applicant);
-            await context.SaveChangesAsync();
+            _context.Applicants.Update(applicant);
+            await _context.SaveChangesAsync();
         }
 
         public async Task RemoveAsync(Guid id)
         {
-            using var context = new AdmissionCommitteeDbContext();
-
-            var applicant = await context.Applicants
+            var applicant = await _context.Applicants
                 .FirstOrDefaultAsync(a => a.Id == id);
 
             if (applicant != null)
             {
-                context.Applicants.Remove(applicant);
-                await context.SaveChangesAsync();
+                _context.Applicants.Remove(applicant);
+                await _context.SaveChangesAsync();
             }
         }
     }

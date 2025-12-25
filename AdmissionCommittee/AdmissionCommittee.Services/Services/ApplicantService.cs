@@ -13,6 +13,12 @@ namespace AdmissionCommittee.Services
             this.repository = repository;
         }
 
+        public async Task<Applicant> GetByIdAsync(Guid id)
+        {
+            var list = await repository.GetAllAsync();
+            return list.FirstOrDefault(a => a.Id == id);
+        }
+
         public Task<IReadOnlyList<Applicant>> GetAllAsync()
             => repository.GetAllAsync();
 

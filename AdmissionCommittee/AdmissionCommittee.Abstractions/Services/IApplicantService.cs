@@ -9,6 +9,8 @@ namespace AdmissionCommittee.Abstractions.Services
         Task UpdateAsync(Applicant applicant);
         Task RemoveAsync(Guid id);
 
+        Task<Applicant> GetByIdAsync(Guid id);
+
         int CountAll(IReadOnlyList<Applicant> applicants);
         int CountPassed(IReadOnlyList<Applicant> applicants, int minScore);
     }
